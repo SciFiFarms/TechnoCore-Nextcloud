@@ -79,7 +79,15 @@ services:
       - nextcloud-data:/var/www/html/data
       - nextcloud-config:/var/www/html/config
 
-  nextcloud-db:
+  nextcloud_redis:
+    deploy:
+      mode: global
+      restart_policy:
+        condition: any
+    image: redis:4-alpine
+    networks:
+      - nextcloud-internal
+
     deploy:
       mode: global
       restart_policy:
