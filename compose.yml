@@ -40,7 +40,7 @@ services:
       - MYSQL_HOST=nextcloud-db
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
-    image: nextcloud:16 # -fpm
+    image: ${image_provider:-scififarms}/technocore-nextcloud:${TAG:-latest}
     #<<: *logging-defaults
     networks:
       - nextcloud
@@ -60,7 +60,6 @@ services:
     environment:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
-    volumes:
-      - nextcloud-db:/var/lib/mysql
+    image: ${image_provider:-scififarms}/technocore-nextcloud-db:${TAG:-latest}
     networks:
       - nextcloud-internal
