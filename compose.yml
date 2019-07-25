@@ -2,13 +2,20 @@ version: "3.5"
 
 networks:
   nextcloud:
+    # This can be reenabled to force nextcloud/ingress communations to a specific
+    # IP range. This should allow nextcloud to trust proxies from that range... 
+    # However, when I set it up, things still didn't work right. Gave up for now.
+    #ipam:
+    #  config:
+    #    - subnet: 10.42.0.0/24
   nextcloud-internal:
+
 volumes:
   nextcloud-html:
   nextcloud-apps:
   nextcloud-data:
   nextcloud-config:
-  nextcloud-db:
+  nextcloud_db:
 
 secrets:
   nextcloud_admin_password:
@@ -31,10 +38,10 @@ services:
 
   nextcloud:
     depends_on:
-      - nextcloud-db
+      - nextcloud_db
     deploy:
       labels:
-        - traefik.frontend.rule=Host:cloud.${DOMAIN}
+        - traefik.frontend.rule=HostRegexp:cloud.{subdomain:.+}
         - traefik.enable=true
         - traefik.port=80
         - traefik.tags=ingress 
@@ -51,7 +58,7 @@ services:
       restart_policy:
         condition: any
     environment:
-      - MYSQL_HOST=nextcloud-db
+      - MYSQL_HOST=nextcloud_db
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - MYSQL_PASSWORD={{"{{DOCKER-SECRET:nextcloud_db_password}}"}}
@@ -76,7 +83,7 @@ services:
     volumes:
       - nextcloud-html:/var/www/html
       - nextcloud-apps:/var/www/html/custom_apps
-      - nextcloud-data:/var/www/html/data
+      - nextcloud-data:/nextcloud-data
       - nextcloud-config:/var/www/html/config
 
   nextcloud_redis:
@@ -88,6 +95,7 @@ services:
     networks:
       - nextcloud-internal
 
+  nextcloud_db:
     deploy:
       mode: global
       restart_policy:
@@ -97,6 +105,7 @@ services:
       - MYSQL_PASSWORD={{"{{DOCKER-SECRET:nextcloud_password}}"}}
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
+      - TZ=${TZ}
     image: ${image_provider:-scififarms}/technocore-nextcloud-db:${TAG:-latest}
     networks:
       - nextcloud-internal
@@ -105,3 +114,5 @@ services:
         target: nextcloud_password
       - source: nextcloud_db_admin_password
         target: admin_password
+    volumes:
+      - nextcloud_db:/var/lib/mysql
