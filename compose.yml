@@ -71,7 +71,10 @@ services:
       - NEXTCLOUD_TRUSTED_DOMAINS=cloud.${DOMAIN} ${EXTRA_DOMAINS}
       #- MAIL_URL=smtp://[smtp username]:[smtp password]@[server name or IP]:[port: 25, 465, or 587]/
     image: ${image_provider:-scififarms}/technocore-nextcloud:${TAG:-latest}
-    #<<: *logging-defaults
+    logging:
+      driver: "${LOGGING_DRIVER}"
+      options:
+        tag: "{{.Name}}"
     networks:
       - nextcloud
       - nextcloud-internal
