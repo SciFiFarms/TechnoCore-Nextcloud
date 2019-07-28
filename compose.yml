@@ -2,12 +2,10 @@ version: "3.5"
 
 networks:
   nextcloud:
-    # This can be reenabled to force nextcloud/ingress communations to a specific
-    # IP range. This should allow nextcloud to trust proxies from that range... 
-    # However, when I set it up, things still didn't work right. Gave up for now.
-    #ipam:
-    #  config:
-    #    - subnet: 10.42.0.0/24
+    # This is needed to allow Nextcloud to receive visitors actual IP address rather than the ingress' IP.
+    ipam:
+      config:
+        - subnet: 10.42.0.0/24
   nextcloud-internal:
 
 volumes:
