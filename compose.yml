@@ -39,9 +39,10 @@ services:
       - nextcloud_db
     deploy:
       labels:
-        - traefik.frontend.rule=HostRegexp:cloud.{subdomain:.+}
-        - traefik.enable=true
+        - traefik.frontend.rule=$NEXTCLOUD_ROUTING_LABEL
+        - traefik.frontend.priority=$NEXTCLOUD_ROUTING_LABEL_PRIORITY
         - traefik.port=80
+        - traefik.enable=true
         - traefik.tags=ingress 
         - traefik.docker.network=${STACK_NAME:-technocore}_nextcloud
         # Traefik service that listens to HTTP
@@ -66,7 +67,7 @@ services:
       - NEXTCLOUD_ADMIN_PASSWORD={{"{{DOCKER-SECRET:admin_password}}"}}
       - NEXTCLOUD_DATA_DIR=/nextcloud-data/
       # I think these are only referenced the first time Nextcloud is ran.
-      - NEXTCLOUD_TRUSTED_DOMAINS=cloud.${DOMAIN} ${EXTRA_DOMAINS}
+      - NEXTCLOUD_TRUSTED_DOMAINS=cloud.${DOMAIN} ${NEXTCLOUD_EXTRA_DOMAINS}
       #- MAIL_URL=smtp://[smtp username]:[smtp password]@[server name or IP]:[port: 25, 465, or 587]/
     image: ${image_provider:-scififarms}/technocore-nextcloud:${TAG:-latest}
     logging:

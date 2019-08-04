@@ -7,4 +7,11 @@ set_service_flag nextcloud
 #       but they don't actually exist. I think this is likely because the nginx server doesn't know
 #       it needs to serve those on a different path. Would need to figure out how to pass the prefix 
 #       to nginx. 
-#path_prefix NEXTCLOUD cloud
+prefix=cloud
+
+nc_extra_domains=
+for domain in $(echo $EXTRA_DOMAINS | tr "," "\t"); do
+    nc_extra_domains="${nc_extra_domains} ${prefix}.$domain"
+done
+
+export NEXTCLOUD_EXTRA_DOMAINS=$nc_extra_domains
