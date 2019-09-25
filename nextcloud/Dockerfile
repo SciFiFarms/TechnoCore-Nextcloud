@@ -32,4 +32,11 @@ RUN ln -s  /etc/nextcloud/technocore.config.php /usr/src/nextcloud/config/techno
 
 ENTRYPOINT ["go-init"]
 
+COPY dogfish/ /usr/share/dogfish
+COPY shell-migrations/ /usr/share/dogfish/shell-migrations
+RUN ln -s /usr/share/dogfish/dogfish /usr/bin/dogfish
+RUN mkdir /var/lib/dogfish 
+# Need to do this all together because ultimately, the config folder is a volume, and anything done in there will be lost. 
+RUN mkdir -p /var/www/html/config/ && touch /var/www/html/config/migrations.log && ln -s /var/www/html/config/migrations.log /var/lib/dogfish/migrations.log 
+
 CMD ["-main", "entrypoint.sh /entrypoint.sh apache2-foreground", "-post", "/usr/bin/exitpoint.sh"]
