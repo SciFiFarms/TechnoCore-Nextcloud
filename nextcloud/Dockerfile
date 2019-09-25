@@ -1,4 +1,4 @@
-FROM nextcloud:16
+FROM nextcloud:17.0.0RC2
 
 # I found most of this list at: https://www.reddit.com/r/NextCloud/comments/a1ftq1/nextcloud_docker_image_with_cronjob/
 RUN apt-get update && \
