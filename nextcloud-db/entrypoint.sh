@@ -45,13 +45,6 @@ env_secrets_expand() {
 }
 env_secrets_expand
 
-bash -c 'bash -s <<EOF
-    trap "break;exit" SIGHUP SIGINT SIGTERM
-    while /bin/true; do
-        su -s "/bin/bash" -c "/usr/local/bin/php /var/www/html/cron.php" www-data
-        echo $(date) - Running cron finished
-        sleep 900
-    done
-EOF' &
+dogfish migrate &
 
 exec "$@"

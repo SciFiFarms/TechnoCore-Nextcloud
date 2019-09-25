@@ -3,6 +3,8 @@ FROM nextcloud:16
 # I found most of this list at: https://www.reddit.com/r/NextCloud/comments/a1ftq1/nextcloud_docker_image_with_cronjob/
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    expect \
+    default-mysql-client \
     libmagickwand-dev \
     libmagickcore-6.q16hdri-3-extra \
     ffmpeg && \
@@ -16,7 +18,7 @@ ENV NEXTCLOUD_UPDATE=1
 
 ## Set up the CMD as well as the pre and post hooks.
 COPY go-init /bin/go-init
-COPY entrypoint.sh /usr/bin/entrypoint.sh
+COPY nextcloud/entrypoint.sh /usr/bin/entrypoint.sh
 COPY exitpoint.sh /usr/bin/exitpoint.sh
 
 RUN mkdir /nextcloud-data; \
