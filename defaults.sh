@@ -13,6 +13,8 @@ nc_extra_domains=
 for domain in $(echo $EXTRA_DOMAINS | tr "," "\t"); do
     nc_extra_domains="${nc_extra_domains} ${prefix}.$domain"
 done
+# This is needed to allow internal applications (ie OnlyOffice) to communicate with nextcloud.
+nc_extra_domains="${nc_extra_domains} nextcloud"
 
 export NEXTCLOUD_EXTRA_DOMAINS=$nc_extra_domains
 
