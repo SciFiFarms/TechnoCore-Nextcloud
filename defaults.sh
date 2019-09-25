@@ -15,3 +15,5 @@ for domain in $(echo $EXTRA_DOMAINS | tr "," "\t"); do
 done
 
 export NEXTCLOUD_EXTRA_DOMAINS=$nc_extra_domains
+
+generate_mount dev shell-migrations /usr/share/dogfish/shell-migrations

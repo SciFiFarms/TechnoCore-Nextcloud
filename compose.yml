@@ -86,7 +86,8 @@ services:
       - nextcloud-html:/var/www/html
       - nextcloud-apps:/var/www/html/custom_apps
       - nextcloud-data:/nextcloud-data
-      - nextcloud-config:/var/www/html/config
+      - ${LIVE_MOUNT_NEXTCLOUD_CONFIG:-nextcloud-config}:/var/www/html/config
+      - ${DEV_MOUNT_NEXTCLOUD_SHELL_MIGRATIONS:-$EMPTY_MOUNT}
 
   nextcloud_redis:
     deploy:
