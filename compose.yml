@@ -39,6 +39,7 @@ services:
       - nextcloud_db
     deploy:
       labels:
+        - com.ouroboros.enable=true
         - traefik.frontend.rule=$NEXTCLOUD_ROUTING_LABEL
         - traefik.frontend.priority=$NEXTCLOUD_ROUTING_LABEL_PRIORITY
         - traefik.port=80
@@ -91,6 +92,8 @@ services:
 
   nextcloud_redis:
     deploy:
+      labels:
+        - com.ouroboros.enable=true
       mode: global
       restart_policy:
         condition: any
@@ -100,6 +103,8 @@ services:
 
   nextcloud_db:
     deploy:
+      labels:
+        - com.ouroboros.enable=true
       mode: global
       restart_policy:
         condition: any
