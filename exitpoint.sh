@@ -2,3 +2,4 @@
 kill -s SIGTERM 1
 
 # Testing
+# IT HAS WORKED?!
